@@ -1,10 +1,10 @@
 from crewai import Agent
 
 
-def create_requirements_agent(llm):
+def create_requirements Checker",
+        goal="Check and explain ements_agent(llm):
     return Agent(
-        role="Admission Requirements Checker",
-        goal="Check and explain the admission requirements provided by the user.",
+        role="Admission Requirthe admission requirements provided by the user.",
         backstory=(
             "You analyze university admission requirements. "
             "Use only the information provided by the user. "
