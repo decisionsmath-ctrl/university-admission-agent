@@ -1,13 +1,11 @@
 import streamlit as st
 
-from admission_crew import
-run_admission_agents
+from admission_crew import run_admission_agents
 
 
-
-# =====================================================
+# ============================================================
 # PAGE SETTINGS
-# =====================================================
+# ============================================================
 
 st.set_page_config(
     page_title="University Admission Agent",
@@ -16,262 +14,138 @@ st.set_page_config(
 )
 
 
-# =====================================================
+# ============================================================
 # HEADER
-# =====================================================
+# ============================================================
 
 st.title("🎓 University Admission Agent")
 
 st.write(
-    "A simple multi-agent system for admission requirements, "
-    "eligibility evaluation and program recommendations."
-)
-
-st.info(
-    "Three independent AI agents analyze the same applicant "
-    "and program information."
+    "Analyze university admission requirements, "
+    "check eligibility, and get program recommendations."
 )
 
 
-# =====================================================
-# APPLICANT INFORMATION
-# =====================================================
+# ============================================================
+# STUDENT INFORMATION
+# ============================================================
 
-st.header("👤 Applicant Information")
+st.header("Student Information")
 
-col1, col2 = st.columns(2)
+student_name = st.text_input(
+    "Student Name"
+)
 
-with col1:
+degree = st.text_input(
+    "Current / Previous Degree",
+    placeholder="e.g. BS Mathematics"
+)
 
-    name = st.text_input(
-        "Name",
-        placeholder="Enter applicant name"
-    )
+cgpa = st.text_input(
+    "CGPA",
+    placeholder="e.g. 3.73"
+)
 
-    degree = st.text_input(
-        "Degree",
-        placeholder="e.g. BS Mathematics"
-    )
+academic_background = st.text_area(
+    "Academic Background",
+    placeholder="Describe your academic background."
+)
 
-    cgpa = st.number_input(
-        "CGPA",
-        min_value=0.0,
-        max_value=4.0,
-        value=3.0,
-        step=0.01
-    )
+interests = st.text_area(
+    "Research / Academic Interests",
+    placeholder="e.g. AI, Machine Learning, Optimization"
+)
 
-    english = st.text_input(
-        "English Test / Score",
-        placeholder="e.g. IELTS 7.0"
-    )
-
-
-with col2:
-
-    interests = st.text_area(
-        "Academic / Career Interests",
-        placeholder=(
-            "e.g. AI, Machine Learning, "
-            "Data Science, Optimization"
-        )
-    )
-
-    background = st.text_area(
-        "Academic Background",
-        placeholder=(
-            "e.g. Calculus, Linear Algebra, "
-            "Statistics, Python, Optimization"
-        )
-    )
+skills = st.text_area(
+    "Skills",
+    placeholder="e.g. Python, Machine Learning, Data Analysis"
+)
 
 
-# =====================================================
+# ============================================================
 # PROGRAM INFORMATION
-# =====================================================
+# ============================================================
 
-st.header("🎓 Program Information")
+st.header("University Program Information")
 
-university = st.text_input(
-    "University",
-    placeholder="e.g. Demo University"
-)
-
-program = st.text_input(
-    "Program",
-    placeholder="e.g. MS Artificial Intelligence"
-)
-
-requirements = st.text_area(
-    "Admission Requirements",
-    height=220,
-    placeholder="""Example:
-
-Minimum CGPA: 3.0
-Degree: Mathematics, Computer Science or related field
-English: IELTS 6.5
-Prerequisites: Linear Algebra, Statistics, Programming
-Other requirements: CV and Statement of Purpose
-"""
+program_information = st.text_area(
+    "Paste University / Program Information",
+    height=250,
+    placeholder=(
+        "Paste the university program information here, "
+        "including degree requirements, CGPA, prerequisites, "
+        "and other stated admission requirements."
+    )
 )
 
 
-# =====================================================
-# ANALYZE BUTTON
-# =====================================================
+# ============================================================
+# ANALYZE
+# ============================================================
 
-if st.button(
-    "🔍 Analyze Admission",
-    type="primary",
-    use_container_width=True
-):
+if st.button("🔍 Analyze Admission", use_container_width=True):
 
-    # -----------------------------------------------
-    # BASIC VALIDATION
-    # -----------------------------------------------
+    if not degree or not program_information:
 
-    if not degree:
-
-        st.error("Please enter the applicant's degree.")
-
-    elif not university:
-
-        st.error("Please enter the university.")
-
-    elif not program:
-
-        st.error("Please enter the program.")
-
-    elif not requirements:
-
-        st.error("Please enter the admission requirements.")
+        st.warning(
+            "Please provide at least the student's degree "
+            "and the university program information."
+        )
 
     else:
 
-        # -------------------------------------------
-        # CREATE APPLICANT PROFILE
-        # -------------------------------------------
-
         student_profile = f"""
-        Name:
-        {name}
+Student Name: {student_name}
 
-        Degree:
-        {degree}
+Degree: {degree}
 
-        CGPA:
-        {cgpa}
+CGPA: {cgpa}
 
-        English Test / Score:
-        {english}
+Academic Background:
+{academic_background}
 
-        Academic / Career Interests:
-        {interests}
+Interests:
+{interests}
 
-        Academic Background:
-        {background}
-        """
+Skills:
+{skills}
+"""
 
-        # -------------------------------------------
-        # CREATE PROGRAM INFORMATION
-        # -------------------------------------------
+        with st.spinner(
+            "Running Requirements, Eligibility, and Recommendation agents..."
+        ):
 
-        program_information = f"""
-        University:
-        {university}
+            try:
 
-        Program:
-        {program}
-
-        Admission Requirements:
-        {requirements}
-        """
-
-        # -------------------------------------------
-        # RUN AGENTS
-        # -------------------------------------------
-
-        try:
-
-            with st.spinner(
-                "Running the three independent agents..."
-            ):
-
-                result = run_admission_agents(
+                (
+                    requirements_result,
+                    eligibility_result,
+                    recommendation_result
+                ) = run_admission_agents(
                     student_profile,
                     program_information
                 )
 
-            st.success(
-                "Analysis completed."
-            )
+                # ====================================================
+                # RESULTS
+                # ====================================================
 
-            # ---------------------------------------
-            # DISPLAY RESULTS
-            # ---------------------------------------
+                st.success("Analysis completed.")
 
-            st.header("📊 Agent Results")
+                st.header("📋 Admission Requirements")
 
-            if hasattr(result, "tasks_output"):
+                st.write(requirements_result)
 
-                outputs = result.tasks_output
+                st.header("✅ Eligibility Assessment")
 
-                # Requirements
-                if len(outputs) >= 1:
+                st.write(eligibility_result)
 
-                    with st.expander(
-                        "1️⃣ Requirements Agent",
-                        expanded=True
-                    ):
+                st.header("🎯 Program Recommendations")
 
-                        st.markdown(
-                            outputs[0].raw
-                        )
+                st.write(recommendation_result)
 
-                # Eligibility
-                if len(outputs) >= 2:
+            except Exception as error:
 
-                    with st.expander(
-                        "2️⃣ Eligibility Agent",
-                        expanded=True
-                    ):
+                st.error("An error occurred while running the agents.")
 
-                        st.markdown(
-                            outputs[1].raw
-                        )
-
-                # Recommendation
-                if len(outputs) >= 3:
-
-                    with st.expander(
-                        "3️⃣ Recommendation Agent",
-                        expanded=True
-                    ):
-
-                        st.markdown(
-                            outputs[2].raw
-                        )
-
-            else:
-
-                st.write(result)
-
-        except Exception as error:
-
-            st.error(
-                "The application could not complete the analysis."
-            )
-
-            st.exception(error)
-
-
-# =====================================================
-# FOOTER
-# =====================================================
-
-st.divider()
-
-st.caption(
-    "AI-assisted assessment only. Always verify final "
-    "admission requirements with the official university."
-)
+                st.exception(error)
