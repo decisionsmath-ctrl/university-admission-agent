@@ -1,4 +1,40 @@
+import os
+from concurrent.futures import ThreadPoolExecutor
 
+# ============================================================
+# GROQ + CREWAI COMPATIBILITY FIX
+# ============================================================
+
+try:
+    import crewai.llms.cache as _crewai_cache
+    _crewai_cache.mark_cache_breakpoint = lambda message: message
+except Exception:
+    pass
+
+
+# ============================================================
+# CREWAI IMPORTS
+# ============================================================
+
+from crewai import Crew, LLM, Task
+
+from requirements_agent import create_requirements_agent
+from eligibility_agent import create_eligibility_agent
+from recommendation_agent import create_recommendation_agent
+
+
+# ============================================================
+# CREATE GROQ LLM
+# ============================================================
+
+def create_llm():
+    api_key = os.getenv("GROQ_API_KEY")
+
+    if not api_key:
+        raise ValueError(
+            "GROQ_API_KEY is missing. "
+            "Please add it to Streamlit Cloud Secrets."
+        )
             "GROQ_API_KEY is missing. "
             "Please add it to Streamlit Cloud Secrets."
         )
