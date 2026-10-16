@@ -27,14 +27,12 @@ from recommendation_agent import create_recommendation_agent
 # CREATE GROQ LLM
 # ============================================================
 
+
 def create_llm():
     api_key = os.getenv("GROQ_API_KEY")
 
     if not api_key:
         raise ValueError(
-            "GROQ_API_KEY is missing. "
-            "Please add it to Streamlit Cloud Secrets."
-        )
             "GROQ_API_KEY is missing. "
             "Please add it to Streamlit Cloud Secrets."
         )
@@ -44,6 +42,7 @@ def create_llm():
         api_key=api_key,
         temperature=0.2
     )
+
 
 
 # ============================================================
