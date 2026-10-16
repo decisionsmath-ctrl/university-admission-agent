@@ -1,18 +1,10 @@
+import os
 
 import streamlit as st
 
-from admission_crew import run_admission_agents
-
-# Load the Groq key from Streamlit Secrets before anything else
-if "GROQ_API_KEY" in st.secrets:
-    os.environ["GROQ_API_KEY"] = st.secrets["GROQ_API_KEY"]
-
-from admission_crew import run_admission_agents
-
-# ... the rest of your app code below
 
 # ============================================================
-# PAGE CONFIGURATION
+# PAGE CONFIGURATION (must be the first Streamlit command)
 # ============================================================
 
 st.set_page_config(
@@ -21,6 +13,26 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
+
+
+# ============================================================
+# LOAD GROQ API KEY FROM STREAMLIT SECRETS
+# ============================================================
+
+try:
+    if "GROQ_API_KEY" in st.secrets:
+        os.environ["GROQ_API_KEY"] = st.secrets["GROQ_API_KEY"]
+except Exception:
+    # No secrets file (e.g. running locally). create_llm() will show
+    # a clear message if the key is missing.
+    pass
+
+
+# ============================================================
+# IMPORT AGENTS (after the key is set)
+# ============================================================
+
+from admission_crew import run_admission_agents
 
 
 # ============================================================
