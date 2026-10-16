@@ -1,151 +1,439 @@
+
 import streamlit as st
 
 from admission_crew import run_admission_agents
 
 
 # ============================================================
-# PAGE SETTINGS
+# PAGE CONFIGURATION
 # ============================================================
 
 st.set_page_config(
-    page_title="University Admission Agent",
+    page_title="UniMatch AI | Admission Intelligence",
     page_icon="🎓",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
 
 
 # ============================================================
-# HEADER
+# CUSTOM DESIGN
 # ============================================================
 
-st.title("🎓 University Admission Agent")
+st.markdown(
+    """
+    <style>
+    .stApp {
+        background-color: #f5f7fb;
+    }
 
-st.write(
-    "Analyze university admission requirements, "
-    "check eligibility, and get program recommendations."
+    [data-testid="stHeader"] {
+        background-color: rgba(245, 247, 251, 0.95);
+    }
+
+    .block-container {
+        max-width: 1250px;
+        padding-top: 2rem;
+        padding-bottom: 3rem;
+    }
+
+    .hero {
+        padding: 2rem 2.2rem;
+        border-radius: 20px;
+        background: linear-gradient(120deg, #102a43, #176b87);
+        color: white;
+        margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+        color: white;
+        font-size: 2.35rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .hero p {
+        color: #e1edf5;
+        font-size: 1rem;
+        margin-bottom: 0;
+    }
+
+    .section-label {
+        color: #176b87;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+    }
+
+    .info-card {
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 15px;
+        padding: 1.1rem 1.25rem;
+        margin-bottom: 1rem;
+    }
+
+    .info-card h4 {
+        margin-top: 0;
+        color: #102a43;
+    }
+
+    div.stButton > button[kind="primary"] {
+        background: #176b87;
+        border: none;
+        border-radius: 10px;
+        min-height: 3rem;
+        font-weight: 600;
+    }
+
+    div.stButton > button[kind="primary"]:hover {
+        background: #12566d;
+        border: none;
+    }
+
+    div[data-testid="stVerticalBlockBorderWrapper"] {
+        border-radius: 14px;
+    }
+
+    .footer-note {
+        color: #64748b;
+        font-size: 0.83rem;
+        text-align: center;
+        padding-top: 1.5rem;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
 )
 
 
 # ============================================================
-# STUDENT INFORMATION
+# SIDEBAR
 # ============================================================
 
-st.header("Student Information")
+with st.sidebar:
+    st.markdown("## 🎓 UniMatch AI")
+    st.caption("University Admission Intelligence")
 
-student_name = st.text_input(
-    "Student Name"
-)
+    st.divider()
 
-degree = st.text_input(
-    "Current / Previous Degree",
-    placeholder="e.g. BS Mathematics"
-)
+    st.markdown("### How it works")
 
-cgpa = st.text_input(
-    "CGPA",
-    placeholder="e.g. 3.73"
-)
+    st.markdown(
+        """
+        **01 — Requirements**
 
-academic_background = st.text_area(
-    "Academic Background",
-    placeholder="Describe your academic background."
-)
+        Extract stated admission criteria.
 
-interests = st.text_area(
-    "Research / Academic Interests",
-    placeholder="e.g. AI, Machine Learning, Optimization"
-)
+        **02 — Eligibility**
 
-skills = st.text_area(
-    "Skills",
-    placeholder="e.g. Python, Machine Learning, Data Analysis"
-)
+        Compare the student profile with those criteria.
 
+        **03 — Recommendations**
 
-# ============================================================
-# PROGRAM INFORMATION
-# ============================================================
-
-st.header("University Program Information")
-
-program_information = st.text_area(
-    "Paste University / Program Information",
-    height=250,
-    placeholder=(
-        "Paste the university program information here, "
-        "including degree requirements, CGPA, prerequisites, "
-        "and other stated admission requirements."
+        Identify matching programs from the supplied information.
+        """
     )
+
+    st.divider()
+
+    st.markdown("### Before you begin")
+
+    st.markdown(
+        """
+        - Enter your academic details.
+        - Paste the official program information.
+        - Review each agent's independent analysis.
+        """
+    )
+
+    st.info(
+        "This tool provides preliminary guidance, "
+        "not an official admission decision."
+    )
+
+
+# ============================================================
+# HERO HEADER
+# ============================================================
+
+st.markdown(
+    """
+    <div class="hero">
+        <div class="section-label" style="color:#9ee7f5;">
+            SMARTER ACADEMIC PLANNING
+        </div>
+        <h1>Find Your Next Academic Opportunity</h1>
+        <p>
+            Analyze admission requirements, assess your eligibility,
+            and discover suitable programs with three specialized agents.
+        </p>
+    </div>
+    """,
+    unsafe_allow_html=True
 )
 
 
 # ============================================================
-# ANALYZE
+# OVERVIEW
 # ============================================================
 
-if st.button("🔍 Analyze Admission", use_container_width=True):
+col1, col2, col3 = st.columns(3)
 
-    if not degree or not program_information:
+with col1:
+    st.markdown(
+        """
+        <div class="info-card">
+            <h4>📋 Requirements</h4>
+            <p>Identify stated degree, CGPA, and prerequisite criteria.</p>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
-        st.warning(
-            "Please provide at least the student's degree "
-            "and the university program information."
+with col2:
+    st.markdown(
+        """
+        <div class="info-card">
+            <h4>✓ Eligibility</h4>
+            <p>Compare academic information against supplied criteria.</p>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+with col3:
+    st.markdown(
+        """
+        <div class="info-card">
+            <h4>🎯 Recommendations</h4>
+            <p>Find programs aligned with your background and interests.</p>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+
+# ============================================================
+# INPUT FORM
+# ============================================================
+
+st.markdown("## Build Your Student Profile")
+st.caption(
+    "Complete the fields below. Only your degree and program "
+    "information are required to start an analysis."
+)
+
+with st.form("admission_analysis_form"):
+
+    st.markdown("### 1. Academic Information")
+
+    name_col, degree_col, cgpa_col = st.columns([1, 2, 1])
+
+    with name_col:
+        student_name = st.text_input(
+            "Student name (optional)",
+            placeholder="Your name"
+        )
+
+    with degree_col:
+        degree = st.text_input(
+            "Current / Previous Degree *",
+            placeholder="e.g. BS Mathematics"
+        )
+
+    with cgpa_col:
+        cgpa = st.text_input(
+            "CGPA (optional)",
+            placeholder="e.g. 3.73 / 4.00"
+        )
+
+    academic_background = st.text_area(
+        "Academic Background (optional)",
+        placeholder=(
+            "Relevant courses, academic achievements, "
+            "research experience, or previous qualifications..."
+        ),
+        height=110
+    )
+
+    st.markdown("### 2. Interests and Skills")
+
+    interest_col, skills_col = st.columns(2)
+
+    with interest_col:
+        interests = st.text_area(
+            "Research / Academic Interests",
+            placeholder="e.g. Optimization, AI, Applied Mathematics",
+            height=100
+        )
+
+    with skills_col:
+        skills = st.text_area(
+            "Technical and Academic Skills",
+            placeholder="e.g. Python, Statistics, Data Analysis",
+            height=100
+        )
+
+    st.markdown("### 3. University Program Information")
+
+    st.caption(
+        "Paste the available official information. You can include "
+        "multiple programs, provided their details are clearly identified."
+    )
+
+    program_information = st.text_area(
+        "Program details *",
+        placeholder=(
+            "University: [University name]\n"
+            "Program: [Degree/program name]\n"
+            "Required degree: ...\n"
+            "Minimum CGPA: ...\n"
+            "Prerequisites: ...\n"
+            "Other admission conditions: ..."
+        ),
+        height=240
+    )
+
+    submitted = st.form_submit_button(
+        "🔍 Analyze My Admission Options",
+        type="primary",
+        use_container_width=True
+    )
+
+
+# ============================================================
+# VALIDATION AND AGENT EXECUTION
+# ============================================================
+
+if submitted:
+
+    if not degree.strip():
+        st.error("Please enter your current or previous degree.")
+
+    elif not program_information.strip():
+        st.error(
+            "Please paste the university or program information "
+            "before starting the analysis."
         )
 
     else:
 
         student_profile = f"""
-Student Name: {student_name}
+STUDENT PROFILE
 
-Degree: {degree}
+Name: {student_name.strip() or "Not provided"}
 
-CGPA: {cgpa}
+Degree: {degree.strip()}
+
+CGPA: {cgpa.strip() or "Not provided"}
 
 Academic Background:
-{academic_background}
+{academic_background.strip() or "Not provided"}
 
-Interests:
-{interests}
+Academic / Research Interests:
+{interests.strip() or "Not provided"}
 
 Skills:
-{skills}
+{skills.strip() or "Not provided"}
 """
 
-        with st.spinner(
-            "Running Requirements, Eligibility, and Recommendation agents..."
-        ):
+        st.markdown("---")
+        st.markdown("## Your Admission Analysis")
 
-            try:
-
+        try:
+            with st.spinner(
+                "The three agents are analyzing your information. "
+                "This may take a little time..."
+            ):
                 (
                     requirements_result,
                     eligibility_result,
                     recommendation_result
                 ) = run_admission_agents(
                     student_profile,
-                    program_information
+                    program_information.strip()
                 )
 
-                # ====================================================
-                # RESULTS
-                # ====================================================
+            st.success("All three agents returned their results.")
 
-                st.success("Analysis completed.")
+            tab1, tab2, tab3 = st.tabs(
+                [
+                    "📋 Requirements",
+                    "✓ Eligibility",
+                    "🎯 Recommendations"
+                ]
+            )
 
-                st.header("📋 Admission Requirements")
+            with tab1:
+                st.subheader("Admission Requirements")
+                st.caption(
+                    "Requirements identified from the information you supplied."
+                )
+                st.markdown(str(requirements_result))
 
-                st.write(requirements_result)
+            with tab2:
+                st.subheader("Eligibility Assessment")
+                st.caption(
+                    "A preliminary comparison, not an official admission decision."
+                )
+                st.markdown(str(eligibility_result))
 
-                st.header("✅ Eligibility Assessment")
+            with tab3:
+                st.subheader("Program Recommendations")
+                st.caption(
+                    "Recommendations based only on the supplied program details."
+                )
+                st.markdown(str(recommendation_result))
 
-                st.write(eligibility_result)
+            st.divider()
 
-                st.header("🎯 Program Recommendations")
+            st.download_button(
+                label="⬇️ Download Analysis as Text",
+                data=(
+                    "UNIMATCH AI — ADMISSION ANALYSIS\n\n"
+                    "STUDENT PROFILE\n"
+                    f"{student_profile}\n\n"
+                    "PROGRAM INFORMATION\n"
+                    f"{program_information}\n\n"
+                    "ADMISSION REQUIREMENTS\n"
+                    f"{requirements_result}\n\n"
+                    "ELIGIBILITY ASSESSMENT\n"
+                    f"{eligibility_result}\n\n"
+                    "PROGRAM RECOMMENDATIONS\n"
+                    f"{recommendation_result}\n"
+                ),
+                file_name="unimatch_admission_analysis.txt",
+                mime="text/plain"
+            )
 
-                st.write(recommendation_result)
+            st.caption(
+                "Please verify admission criteria with the university's "
+                "official admissions office before making decisions."
+            )
 
-            except Exception as error:
+        except Exception as error:
+            st.error(
+                "The analysis could not be completed. "
+                "Check the application logs for the underlying error."
+            )
 
-                st.error("An error occurred while running the agents.")
+            # Show the error to the developer for debugging.
+            st.exception(error)
 
-                st.exception(error)
+
+# ============================================================
+# FOOTER
+# ============================================================
+
+st.markdown(
+    """
+    <div class="footer-note">
+        UniMatch AI · Multi-Agent University Admission Assistant
+        <br>
+        Preliminary guidance only — always verify requirements with
+        the relevant university.
+    </div>
+    """,
+    unsafe_allow_html=True
+)
