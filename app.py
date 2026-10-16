@@ -3,6 +3,13 @@ import streamlit as st
 
 from admission_crew import run_admission_agents
 
+# Load the Groq key from Streamlit Secrets before anything else
+if "GROQ_API_KEY" in st.secrets:
+    os.environ["GROQ_API_KEY"] = st.secrets["GROQ_API_KEY"]
+
+from admission_crew import run_admission_agents
+
+# ... the rest of your app code below
 
 # ============================================================
 # PAGE CONFIGURATION
