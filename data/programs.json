@@ -1,0 +1,15 @@
+[
+  {
+    "university": "Example University",
+    "program": "MS Computer Science",
+    "level": "MS",
+    "min_years_education": 16,
+    "accepted_degrees": ["BS Computer Science", "BS Software Engineering", "BS Information Technology"],
+    "min_cgpa": 2.5,
+    "cgpa_scale": 4.0,
+    "entry_test": {"name": "GAT-General", "min_score": 50},
+    "english_requirement": "Not specified",
+    "source_url": "https://university-official-site/admissions",
+    "last_verified": "2026-10-01"
+  }
+]
