@@ -38,7 +38,7 @@ def create_llm():
         )
 
     return LLM(
-        model="groq/openai/gpt-oss-20b",
+        model="groq/llama-3.3-70b-versatile",
         api_key=api_key,
         temperature=0.2
     )
